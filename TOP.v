@@ -49,7 +49,7 @@ module TOP(
 ///Wires del PIPE ID_EX///                        //
     wire [31:0]RD1_idex_out_RD1;                  //
     wire [31:0]RD2_idex_out_RD2;                  //
-    wire [31:0]A3_idex_out_A3_exmem_in;           //
+    wire [4:0]A3_idex_out_A3_exmem_in;           //
     wire [31:0]SignImmE;                          //
                                                   //
 ////////////////////////////////////////////////////
