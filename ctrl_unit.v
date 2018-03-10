@@ -29,27 +29,27 @@ module ctrl_unit(
     //////////////
         
         // MEM_Ctrl: Señal de control de la memoria (2 bits) {MSB: Enable,  LSB: write o read }
-        
-        
-    
-    
 	
 	always @(*)begin
-		
+
 		// DECO
-        RegWriteD = (op == 7'b0110011) || (op == 7'b0010011);
-        Sel_Inmediato = (op == 7'b0100011);
-        BranchD=(op==7'b1100011);
-        
-        // EXE
-		ALUControlD=funct;
-		ALUSrcD=(op==7'b0010011);
-		
+		RegWriteD = (op == 7'b0110011) || (op == 7'b0010011);
+		Sel_Inmediato = (op == 7'b0100011);
+
+		if (op==7'b1100011)
+		    BranchD = 1'b1;
+		else
+		    BranchD = 1'b0;
+
+		// EXE
+		ALUControlD = funct;
+		ALUSrcD = (op == 7'b0010011) || (op == 7'b0100011);
+
 		// MEM
-        if (op == 7'b0100011)
-            MEM_Ctrl = 2'b11;
-        else 
-            MEM_Ctrl = 2'b00;
+	 	if (op == 7'b0100011)
+	    		MEM_Ctrl = 2'b11;
+		else 
+	    		MEM_Ctrl = 2'b00;
 
 	end
 endmodule
