@@ -5,7 +5,7 @@ module Inst_Memory(Din,Dout);
 input wire [31:0] Din;
 output wire [31:0] Dout;
 
-reg [31:0] memdata [31:0];
+        reg [31:0] memdata [511:0];
 
 initial
         begin
