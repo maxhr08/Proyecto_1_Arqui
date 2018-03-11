@@ -49,14 +49,16 @@ module TOP(
 ///Wires del PIPE ID_EX///                        //
     wire [31:0]RD1_idex_out_RD1;                  //
     wire [31:0]RD2_idex_out_RD2;                  //
-    wire [4:0]A3_idex_out_A3_exmem_in;           //
+    wire [31:0]A3_idex_out_A3_exmem_in;           //
     wire [31:0]SignImmE;                          //
                                                   //
 ////////////////////////////////////////////////////
 ////                 EXE                        ////
 ////////////////////////////////////////////////////
                                                   //
-    wire [31:0]alu_out_alu_exmem_in;              //
+    wire [31:0]alu_out_alu_exmem_in;   
+    wire [4:0]RD1AddrE_RD1AddrEXE;                 //
+    wire [4:0]RD2AddrE_RD2AddrEXE;                 //
                                                   //
 ////Senales de Control////                        //
     wire RegWriteE,                               //       
@@ -137,7 +139,7 @@ module TOP(
 ////////////////////////////////////////////////////
 ////                DECO                        ////
 ////////////////////////////////////////////////////
-    
+
     Decode Decode(
     //INPUT//
         .clk(clk),
@@ -171,13 +173,16 @@ module TOP(
             .RD1_idex_in(RS1_RD1_idex_in),  
             .RD2_idex_in(RS2_RD2_idex_in),    
             .SignImmD(inmediato_SignImmD),      
-            
-         
+            .RD1AddrD(out_inst_IF_ID[19:15]),
+            .RD2AddrD(out_inst_IF_ID[24:20]),    
+                    
         //OUTPUT//
             .RD1_idex_out(RD1_idex_out_RD1),              
             .RD2_idex_out(RD2_idex_out_RD2),     
             .A3_idex_out(A3_idex_out_A3_exmem_in),          
             .SignImmE(SignImmE),          
+            .RD1AddrE(RD1AddrE_RD1AddrEXE),    //X
+            .RD2AddrE(RD2AddrE_RD2AddrEXE),    //Y
            
          //control
             //INPUT//
@@ -185,16 +190,16 @@ module TOP(
              .ALUSrcD(ALUSrcD),
              .ALUControlD(ALUControlD),
              .funct3_idex_in(out_inst_IF_ID[14:12]),
-             .MEM_CtrlD(Mem_CtrlD),
-             
-             
+             .MemtoRegD(Mem_CtrlD[0]),
+             .MemWriteD(Mem_CtrlD[1]),
              
             //OUTPUT//
              .RegWriteE(RegWriteE),
              .ALUSrcE(ALUSrcE),
              .ALUControlE(ALUControlE),
              .funct3_idex_out(funct3_idex_funct3_exmem_in),
-             .MEM_CtrlE(Mem_CtrlE)
+             .MemtoRegE(Mem_CtrlE[0]),
+             .MemWriteE(Mem_CtrlE[1])
             
     );
     
@@ -209,6 +214,10 @@ module TOP(
                 .SignImmE(SignImmE),
                 .RD1(RD1_idex_out_RD1), 
                 .RD2(RD2_idex_out_RD2),
+                .RD1Addr(RD1AddrE_RD1AddrEXE), //X
+                .RD2Addr(RD2AddrE_RD2AddrEXE), //Y
+                .RDAddr(A3_exmem_out_A3_memwb_in),
+                .alu_MEM(alu_exmem_out_Address),
                 
             //OUTPUT//
                 .alu_out(alu_out_alu_exmem_in)
@@ -230,11 +239,13 @@ module TOP(
             
             //control
                 .RegWriteE(RegWriteE),
-                .MEM_CtrlE(Mem_CtrlE),
+                .MemtoRegE(Mem_CtrlE[0]),
+                .MemWriteE(Mem_CtrlE[1]),
                 .funct3_exmem_in(funct3_idex_funct3_exmem_in),
                 
                 .RegWriteM(RegWriteM),
-                .MEM_CtrlM(Mem_CtrlM),
+                .MemtoRegM(Mem_CtrlM[0]),
+                .MemWriteM(Mem_CtrlM[1]),
                 .funct3_exmem_out(funct_3_exmem_out_funct3)
     
     );

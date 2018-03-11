@@ -11,17 +11,17 @@ input reset;
 output [31:0] instruction;
 output [31:0] pc4;
 
-wire [31:0] out_add;
+//wire [31:0] out_add;
 wire [31:0] next_pc;
 wire [31:0] pc_out;
-wire [31:0] Dout;
+//wire [31:0] Dout;
 
 //////////////////////////   
 //////////////////////////
 
 mux_pc U1(
     //INPUT//
-        .pc_4(out_add),
+        .pc_4(pc4),
         .beq(beq),
         .sel(sel),
         
@@ -50,7 +50,7 @@ Inst_Memory U3(
         .Din(pc_out),
     
     //OUTPUT// 
-        .Dout(Dout)
+        .Dout(instruction)
 );
 
 //////////////////////////   
@@ -61,12 +61,12 @@ add U4(
         .in_add(pc_out),
     
     //OUTPUT// 
-        .out_add(out_add)
+        .out_add(pc4)
 );
 
 //////////////////////////   
 //////////////////////////
-
+/*
 pipe1 U6(
     //INPUT//
         .in_inst(Dout),
@@ -79,7 +79,7 @@ pipe1 U6(
         .out_pc4(pc4)
         
 );
-
+*/
 //////////////////////////   
 //////////////////////////
 
