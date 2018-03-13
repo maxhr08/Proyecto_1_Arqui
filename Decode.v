@@ -98,7 +98,7 @@ module Decode(
     mux_dato Mux_Rs1_Rs2_salida(
         .RS1(Rs1_reg_file),
         .RS2(Rs2_reg_file),
-        .alu_out_MEM(dato_EXE),
+        .alu_out_MEM(dato_MEM),
         .S_R1(Sel_Rs1D),
         .S_R2(Sel_Rs2D),
         
@@ -123,7 +123,7 @@ module Decode(
     );
     
 //------------------------------
-//   MUX de Dato RS1 a comparar     Instancia de MUX de operando 1 a comparar
+//   MUX de Dato RS2 a comparar     Instancia de MUX de operando 2 a comparar
 //------------------------------     
 
     wire [31:0] Op_Comp_Rs2;        // Operando a comparar Rs1

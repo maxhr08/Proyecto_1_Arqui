@@ -140,6 +140,8 @@ module TOP(
 ////                DECO                        ////
 ////////////////////////////////////////////////////
 
+   
+
     Decode Decode(
     //INPUT//
         .clk(clk),
@@ -149,6 +151,10 @@ module TOP(
         .write_reg(A3_memwb_out_write_reg),      
         .write_data(alu_memwb_out_write_data),
         .reset(global_reset),
+        .dato_EXE(alu_out_alu_exmem_in),      // Dato de adelantamiento desde EXE
+        .dato_MEM(alu_exmem_out_Address),      // Dato de adelantamiento desde MEM 
+        .dir_Rd_EXE(A3_idex_out_A3_exmem_in),     // Dirección de Rd en EXE
+        .dir_Rd_MEM(A3_exmem_out_A3_memwb_in), 
         
     //OUTPUT//
         .Select_PC(sel_Select_PC),    
@@ -163,45 +169,45 @@ module TOP(
         .MEM_Ctrl(Mem_CtrlD)         
                
     );
+
     
-////INSTANCIA DE ID_EX////
-    
-    ID_EX ID_EX(
-        //INPUT//
-            .clk(clk),
-            .A3_idex_in(out_inst_IF_ID[11:7]),        
-            .RD1_idex_in(RS1_RD1_idex_in),  
-            .RD2_idex_in(RS2_RD2_idex_in),    
-            .SignImmD(inmediato_SignImmD),      
-            .RD1AddrD(out_inst_IF_ID[19:15]),
-            .RD2AddrD(out_inst_IF_ID[24:20]),    
-                    
-        //OUTPUT//
-            .RD1_idex_out(RD1_idex_out_RD1),              
-            .RD2_idex_out(RD2_idex_out_RD2),     
-            .A3_idex_out(A3_idex_out_A3_exmem_in),          
-            .SignImmE(SignImmE),          
-            .RD1AddrE(RD1AddrE_RD1AddrEXE),    //X
-            .RD2AddrE(RD2AddrE_RD2AddrEXE),    //Y
-           
-         //control
+//////INSTANCIA DE ID_EX////
+        
+        ID_EX ID_EX(
             //INPUT//
-             .RegWriteD(RegWriteD),
-             .ALUSrcD(ALUSrcD),
-             .ALUControlD(ALUControlD),
-             .funct3_idex_in(out_inst_IF_ID[14:12]),
-             .MemtoRegD(Mem_CtrlD[0]),
-             .MemWriteD(Mem_CtrlD[1]),
-             
+                .clk(clk),
+                .A3_idex_in(out_inst_IF_ID[11:7]),        
+                .RD1_idex_in(RS1_RD1_idex_in),  
+                .RD2_idex_in(RS2_RD2_idex_in),    
+                .SignImmD(inmediato_SignImmD),      
+                .RD1AddrD(out_inst_IF_ID[19:15]),
+                .RD2AddrD(out_inst_IF_ID[24:20]),    
+                        
             //OUTPUT//
-             .RegWriteE(RegWriteE),
-             .ALUSrcE(ALUSrcE),
-             .ALUControlE(ALUControlE),
-             .funct3_idex_out(funct3_idex_funct3_exmem_in),
-             .MemtoRegE(Mem_CtrlE[0]),
-             .MemWriteE(Mem_CtrlE[1])
-            
-    );
+                .RD1_idex_out(RD1_idex_out_RD1),              
+                .RD2_idex_out(RD2_idex_out_RD2),     
+                .A3_idex_out(A3_idex_out_A3_exmem_in),          
+                .SignImmE(SignImmE),          
+                .RD1AddrE(RD1AddrE_RD1AddrEXE),    //X
+                .RD2AddrE(RD2AddrE_RD2AddrEXE),    //Y
+               
+             //control
+                //INPUT//
+                 .RegWriteD(RegWriteD),
+                 .ALUSrcD(ALUSrcD),
+                 .ALUControlD(ALUControlD),
+                 .funct3_idex_in(out_inst_IF_ID[14:12]),
+                 .MEM_CtrlD(Mem_CtrlD),
+                 
+                //OUTPUT//
+                 .RegWriteE(RegWriteE),
+                 .ALUSrcE(ALUSrcE),
+                 .ALUControlE(ALUControlE),
+                 .funct3_idex_out(funct3_idex_funct3_exmem_in),
+                 .MEM_CtrlE(Mem_CtrlE)
+                
+        );
+
     
 ////////////////////////////////////////////////////
 ////                 EXE                        ////
@@ -212,6 +218,7 @@ module TOP(
                 .ALUControlE(ALUControlE),
                 .ALUSrcE(ALUSrcE),
                 .SignImmE(SignImmE),
+                
                 .RD1(RD1_idex_out_RD1), 
                 .RD2(RD2_idex_out_RD2),
                 .RD1Addr(RD1AddrE_RD1AddrEXE), //X
@@ -239,13 +246,11 @@ module TOP(
             
             //control
                 .RegWriteE(RegWriteE),
-                .MemtoRegE(Mem_CtrlE[0]),
-                .MemWriteE(Mem_CtrlE[1]),
+                .MEM_CtrlE(Mem_CtrlE),
                 .funct3_exmem_in(funct3_idex_funct3_exmem_in),
                 
                 .RegWriteM(RegWriteM),
-                .MemtoRegM(Mem_CtrlM[0]),
-                .MemWriteM(Mem_CtrlM[1]),
+                .MEM_CtrlM(Mem_CtrlM),
                 .funct3_exmem_out(funct_3_exmem_out_funct3)
     
     );

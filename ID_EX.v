@@ -13,12 +13,15 @@ module ID_EX(
 	output reg [4:0]RD1AddrE, RD2AddrE,
 	
 	//control
-	input wire RegWriteD, MemtoRegD, MemWriteD, ALUSrcD,
+	input wire RegWriteD, ALUSrcD,
 	input wire [2:0]ALUControlD,
 	input wire [2:0]funct3_idex_in,
-	
+	input wire [1:0]MEM_CtrlD,
+
 	output reg RegWriteE, MemtoRegE, MemWriteE, ALUSrcE,
-	output reg [2:0]ALUControlE, funct3_idex_out
+	output reg [2:0]ALUControlE, funct3_idex_out,
+	output reg [1:0]MEM_CtrlE
+	
     );
 	
 	always @(posedge clk)begin
@@ -30,9 +33,8 @@ module ID_EX(
 		RD1AddrE = RD1AddrD;
 		RD2AddrE = RD2AddrD;
 		
-		MemWriteE=MemWriteD;
+		MEM_CtrlE = MEM_CtrlD;
 		RegWriteE=RegWriteD;
-		MemtoRegE=MemtoRegD;
 		ALUSrcE=ALUSrcD;
 		ALUControlE=ALUControlD;
 	end
