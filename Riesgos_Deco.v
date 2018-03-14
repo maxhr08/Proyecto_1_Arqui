@@ -29,20 +29,20 @@ module Riesgos_Deco(
     
         // MUX Comparador Rs1                 
         if (rd_MEM == rs1)
-            Sel_Comp_Rs1D = 2'b01;
+            Sel_Comp_Rs1D = 2'b10;
             
         else if (rd_EXE == rs1)
-            Sel_Comp_Rs1D = 2'b10;
+            Sel_Comp_Rs1D = 2'b01;
         
         else 
             Sel_Comp_Rs1D = 2'b00;
         
         // MUX Comparador Rs2
         if (rd_MEM == rs2)
-            Sel_Comp_Rs2D = 2'b01;
+            Sel_Comp_Rs2D = 2'b10;
             
         else if (rd_EXE == rs2)
-            Sel_Comp_Rs2D = 2'b10;
+            Sel_Comp_Rs2D = 2'b01;
         
         else 
             Sel_Comp_Rs2D = 2'b00;
