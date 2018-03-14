@@ -33,23 +33,50 @@ module ctrl_unit(
         
     
     
-	
-	always @(*)begin
-		
-		// DECO
-        RegWriteD = (op == 7'b0110011) || (op == 7'b0010011);
-        Sel_Inmediato = (op == 7'b0100011);
-        BranchD=(op==7'b1100011);
+
+    always @(*)begin
+        
+        // DECO
+        if ((op == 7'b0110011)||(op == 7'b0010011))
+            RegWriteD = 1'b1;
+        else
+            RegWriteD = 1'b0;
+        
+        
+        if (op == 7'b0100011)
+            Sel_Inmediato = 1'b1;
+        else
+            Sel_Inmediato = 1'b0;
+            
+        
+        if (op == 7'b1100011)
+            BranchD = 1'b1;
+        else
+            BranchD = 1'b0;
+        
+        
+        
+        //RegWriteD = (op == 7'b0110011) || (op == 7'b0010011);
+        //Sel_Inmediato = (op == 7'b0100011);
+        //BranchD=(op==7'b1100011);
         
         // EXE
-		ALUControlD=funct;
-		ALUSrcD=(op==7'b0010011);
-		
-		// MEM
+        if(op==7'b0100011)
+            ALUControlD=3'b000;
+        else
+            ALUControlD=funct;
+        
+        
+        if ((op==7'b0010011)||(op==7'b0100011))
+            ALUSrcD = 1'b1;
+        else
+            ALUSrcD = 1'b0;
+        
+        // MEM
         if (op == 7'b0100011)
             MEM_Ctrl = 2'b11;
         else 
             MEM_Ctrl = 2'b00;
 
-	end
-endmodule
+    end
+endmodule	
